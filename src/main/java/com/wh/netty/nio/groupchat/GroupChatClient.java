@@ -9,21 +9,34 @@ import java.nio.channels.SocketChannel;
 import java.util.Iterator;
 import java.util.Scanner;
 
+/**
+ * @author 15583
+ */
 public class GroupChatClient {
 
-    //定义相关的属性
-    private final String HOST = "127.0.0.1"; // 服务器的ip
-    private final int PORT = 6667; //服务器端口
+
+    /**
+     *  定义相关的属性
+     *   服务器的ip
+     *   服务器端口
+     */
+    private final String HOST = "127.0.0.1";
+    private final int PORT = 6667;
     private Selector selector;
     private SocketChannel socketChannel;
     private String username;
 
-    //构造器, 完成初始化工作
-    public GroupChatClient() throws IOException {
 
+
+    /**
+     * 构造器, 完成初始化工作
+     * @throws IOException 异常
+     */
+    private GroupChatClient() throws IOException {
+        //选择器
         selector = Selector.open();
         //连接服务器
-        socketChannel = socketChannel.open(new InetSocketAddress("127.0.0.1", PORT));
+        socketChannel = SocketChannel.open(new InetSocketAddress(HOST, PORT));
         //设置非阻塞
         socketChannel.configureBlocking(false);
         //将channel 注册到selector
@@ -34,8 +47,13 @@ public class GroupChatClient {
 
     }
 
-    //向服务器发送消息
-    public void sendInfo(String info) {
+
+
+    /**
+     * 向服务器发送消息
+     * @param info 输入消息
+     */
+    private void sendInfo(String info) {
 
         info = username + " 说：" + info;
 
@@ -46,13 +64,16 @@ public class GroupChatClient {
         }
     }
 
-    //读取从服务器端回复的消息
-    public void readInfo() {
+    /**
+     * 读取从服务器端回复的消息
+     */
+    private void readInfo() {
 
         try {
 
             int readChannels = selector.select();
-            if(readChannels > 0) {//有可以用的通道
+            //有可以用的通道
+            if(readChannels > 0) {
 
                 Iterator<SelectionKey> iterator = selector.selectedKeys().iterator();
                 while (iterator.hasNext()) {
@@ -69,13 +90,11 @@ public class GroupChatClient {
                         String msg = new String(buffer.array());
                         System.out.println(msg.trim());
                     }
+                    //删除当前的selectionKey, 防止重复操作
+                    iterator.remove();
                 }
-                iterator.remove(); //删除当前的selectionKey, 防止重复操作
-            } else {
-                //System.out.println("没有可以用的通道...");
 
             }
-
         }catch (Exception e) {
             e.printStackTrace();
         }
@@ -88,12 +107,12 @@ public class GroupChatClient {
 
         //启动一个线程, 每个3秒，读取从服务器发送数据
         new Thread() {
+            @Override
             public void run() {
-
                 while (true) {
                     chatClient.readInfo();
                     try {
-                        Thread.currentThread().sleep(3000);
+                        sleep(3000);
                     }catch (InterruptedException e) {
                         e.printStackTrace();
                     }
