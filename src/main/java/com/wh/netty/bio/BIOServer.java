@@ -32,6 +32,7 @@ public class BIOServer {
 
             //就创建一个线程，与之通讯(单独写一个方法)
             newCachedThreadPool.execute(new Runnable() {
+                @Override
                 public void run() { //我们重写
                     //可以和客户端通讯
                     handler(socket);
@@ -43,7 +44,12 @@ public class BIOServer {
 
     }
 
-    //编写一个handler方法，和客户端通讯
+
+    /**
+     * 编写一个handler方法，和客户端通讯
+     *
+     * @param socket socket
+     */
     public static void handler(Socket socket) {
 
         try {
@@ -54,27 +60,23 @@ public class BIOServer {
 
             //循环的读取客户端发送的数据
             while (true) {
-
                 System.out.println("线程信息 id =" + Thread.currentThread().getId() + " 名字=" + Thread.currentThread().getName());
-
                 System.out.println("read....");
-               int read =  inputStream.read(bytes);
-               if(read != -1) {
-                   System.out.println(new String(bytes, 0, read
-                   )); //输出客户端发送的数据
-               } else {
-                   break;
-               }
+                int read = inputStream.read(bytes);
+                if (read != -1) {
+                    //输出客户端发送的数据
+                    System.out.println(new String(bytes, 0, read));
+                } else {
+                    break;
+                }
             }
-
-
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             System.out.println("关闭和client的连接");
             try {
                 socket.close();
-            }catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 
