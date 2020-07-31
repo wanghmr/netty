@@ -1,10 +1,7 @@
-package com.wh.netty.netty;
+package com.wh.netty.netty.simple;
 
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelInitializer;
-import io.netty.channel.ChannelOption;
-import io.netty.channel.EventLoopGroup;
+import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
@@ -31,10 +28,10 @@ public class NettyServer {
             ServerBootstrap serverBootstrap = new ServerBootstrap();
 
             //使用链式编程配置
-            serverBootstrap.group(boosGroup,workGroup)//设置两个线程组
+            serverBootstrap.group(boosGroup, workGroup)//设置两个线程组
                     .channel(NioServerSocketChannel.class)//使用NioSocketChannel作为服务器通道实现
-                    .option(ChannelOption.SO_BACKLOG,128)//设置线程队列得到连接个数
-                    .childOption(ChannelOption.SO_KEEPALIVE,true)//设置保持活动连接状态
+                    .option(ChannelOption.SO_BACKLOG, 128)//设置线程队列得到连接个数
+                    .childOption(ChannelOption.SO_KEEPALIVE, true)//设置保持活动连接状态
                     .childHandler(new ChannelInitializer<SocketChannel>() {//创建一个通道测试对象（匿名对象）
                         //给pipeLine设置处理器
                         @Override
@@ -47,11 +44,24 @@ public class NettyServer {
             //启动服务器（并绑定端口）
             ChannelFuture channelFuture = serverBootstrap.bind(6668).sync();
 
+            //给channelFuture 注册监听器，监控我们关心的事件
+            channelFuture.addListener(new ChannelFutureListener() {
+                @Override
+                public void operationComplete(ChannelFuture channelFuture) throws Exception {
+                    if (channelFuture.isSuccess()) {
+                        System.out.println("监听端口 6668 成功");
+                    } else {
+                        System.out.println("监听端口 6668 失败");
+                    }
+                }
+            });
+
+
             //对关闭通道进行监听
             channelFuture.channel().closeFuture().sync();
         } catch (Exception e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             boosGroup.shutdownGracefully();
             workGroup.shutdownGracefully();
         }
