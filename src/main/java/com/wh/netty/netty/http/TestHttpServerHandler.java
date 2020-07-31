@@ -9,28 +9,28 @@ import io.netty.util.CharsetUtil;
 
 import java.net.URI;
 
-/*
-说明
-1. SimpleChannelInboundHandler 是 ChannelInboundHandlerAdapter
-2. HttpObject 客户端和服务器端相互通讯的数据被封装成 HttpObject
+/**
+ * 说明
+ * 1. SimpleChannelInboundHandler 是 ChannelInboundHandlerAdapter
+ * 2. HttpObject 客户端和服务器端相互通讯的数据被封装成 HttpObject
+ * @author wh
  */
 public class TestHttpServerHandler extends SimpleChannelInboundHandler<HttpObject> {
 
 
-    //channelRead0 读取客户端数据
+    /**
+     * channelRead0 读取客户端数据
+     */
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, HttpObject msg) throws Exception {
-
-
-        System.out.println("对应的channel=" + ctx.channel() + " pipeline=" + ctx
-        .pipeline() + " 通过pipeline获取channel" + ctx.pipeline().channel());
+        System.out.println("对应的channel=" + ctx.channel() + " pipeline=" + ctx.pipeline() + " 通过pipeline获取channel" + ctx.pipeline().channel());
 
         System.out.println("当前ctx的handler=" + ctx.handler());
 
         //判断 msg 是不是 httprequest请求
-        if(msg instanceof HttpRequest) {
+        if (msg instanceof HttpRequest) {
 
-            System.out.println("ctx 类型="+ctx.getClass());
+            System.out.println("ctx 类型=" + ctx.getClass());
 
             System.out.println("pipeline hashcode" + ctx.pipeline().hashCode() + " TestHttpServerHandler hash=" + this.hashCode());
 
@@ -41,7 +41,7 @@ public class TestHttpServerHandler extends SimpleChannelInboundHandler<HttpObjec
             HttpRequest httpRequest = (HttpRequest) msg;
             //获取uri, 过滤指定的资源
             URI uri = new URI(httpRequest.uri());
-            if("/favicon.ico".equals(uri.getPath())) {
+            if ("/favicon.ico".equals(uri.getPath())) {
                 System.out.println("请求了 favicon.ico, 不做响应");
                 return;
             }
@@ -60,7 +60,6 @@ public class TestHttpServerHandler extends SimpleChannelInboundHandler<HttpObjec
 
         }
     }
-
 
 
 }
