@@ -2,22 +2,26 @@ package com.wh.netty.netty.buf;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import io.netty.util.CharsetUtil;
 
 import java.nio.charset.Charset;
 
+/**
+ * @author wh
+ */
 public class NettyByteBuf02 {
     public static void main(String[] args) {
 
         //创建ByteBuf
-        ByteBuf byteBuf = Unpooled.copiedBuffer("hello,world!", Charset.forName("utf-8"));
+        ByteBuf byteBuf = Unpooled.copiedBuffer("hello,world!", CharsetUtil.UTF_8);
 
         //使用相关的方法
-        if(byteBuf.hasArray()) { // true
+        if (byteBuf.hasArray()) { // true
 
             byte[] content = byteBuf.array();
 
             //将 content 转成字符串
-            System.out.println(new String(content, Charset.forName("utf-8")));
+            System.out.println(new String(content,CharsetUtil.UTF_8));
 
             System.out.println("byteBuf=" + byteBuf);
 
@@ -33,7 +37,7 @@ public class NettyByteBuf02 {
             System.out.println("len=" + len);
 
             //使用for取出各个字节
-            for(int i = 0; i < len; i++) {
+            for (int i = 0; i < len; i++) {
                 System.out.println((char) byteBuf.getByte(i));
             }
 

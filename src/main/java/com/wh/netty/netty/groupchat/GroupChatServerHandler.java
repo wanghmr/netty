@@ -9,6 +9,9 @@ import io.netty.util.concurrent.GlobalEventExecutor;
 
 import java.text.SimpleDateFormat;
 
+/**
+ * @author 15583
+ */
 public class GroupChatServerHandler extends SimpleChannelInboundHandler<String> {
 
     //public static List<Channel> channels = new ArrayList<Channel>();
