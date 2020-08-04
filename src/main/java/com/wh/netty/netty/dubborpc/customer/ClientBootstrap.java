@@ -1,8 +1,11 @@
 package com.wh.netty.netty.dubborpc.customer;
 
-import com.atguigu.netty.dubborpc.netty.NettyClient;
-import com.atguigu.netty.dubborpc.publicinterface.HelloService;
+import com.wh.netty.netty.dubborpc.netty.NettyClient;
+import com.wh.netty.netty.dubborpc.publicinterface.HelloService;
 
+/**
+ * @author wh
+ */
 public class ClientBootstrap {
 
 

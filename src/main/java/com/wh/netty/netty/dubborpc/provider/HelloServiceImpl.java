@@ -1,8 +1,11 @@
 package com.wh.netty.netty.dubborpc.provider;
 
-import com.atguigu.netty.dubborpc.publicinterface.HelloService;
+import com.wh.netty.netty.dubborpc.publicinterface.HelloService;
 
-public class HelloServiceImpl implements HelloService{
+/**
+ * @author 15583
+ */
+public class HelloServiceImpl implements HelloService {
 
     private static int count = 0;
     //当有消费方调用该方法时， 就返回一个结果

@@ -1,12 +1,15 @@
 package com.wh.netty.netty.dubborpc.netty;
 
 
-import com.atguigu.netty.dubborpc.customer.ClientBootstrap;
-import com.atguigu.netty.dubborpc.provider.HelloServiceImpl;
+import com.wh.netty.netty.dubborpc.customer.ClientBootstrap;
+import com.wh.netty.netty.dubborpc.provider.HelloServiceImpl;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 
-//服务器这边handler比较简单
+/**
+ * @author 15583
+ * 服务器这边handler比较简单
+ */
 public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
     @Override
@@ -15,7 +18,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
         System.out.println("msg=" + msg);
         //客户端在调用服务器的api 时，我们需要定义一个协议
         //比如我们要求 每次发消息是都必须以某个字符串开头 "HelloService#hello#你好"
-        if(msg.toString().startsWith(ClientBootstrap.providerName)) {
+        if (msg.toString().startsWith(ClientBootstrap.providerName)) {
 
             String result = new HelloServiceImpl().hello(msg.toString().substring(msg.toString().lastIndexOf("#") + 1));
             ctx.writeAndFlush(result);
